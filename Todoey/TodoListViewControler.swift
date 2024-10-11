@@ -10,8 +10,14 @@ import UIKit
 
 class TodoListViewControler: UITableViewController {
 
+    let defaults = UserDefaults.standard
+    var todos: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let items = defaults.array(forKey: "TodoList") as? [String] {
+            todos = items
+        }
         // Do any additional setup after loading the view.
     }
     
@@ -34,5 +40,24 @@ class TodoListViewControler: UITableViewController {
         }
     }
 
+    @IBAction func onAddPressed(_ sender: UIBarButtonItem) {
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add New Todo", message: nil, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Add", style: .default) { _ in
+            let textField = alert.textFields?.first
+            guard let text = textField?.text else { return }
+            self.todos.append(text)
+            self.defaults.set(self.todos, forKey: "TodoList")
+            self.tableView.reloadData()
+        }
+        
+        alert.addTextField {(alertTextField) in
+            alertTextField.placeholder = "Enter Todo"
+            textField = alertTextField
+        }
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
 }
 
