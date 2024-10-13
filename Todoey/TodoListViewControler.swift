@@ -9,35 +9,70 @@
 import UIKit
 
 class TodoListViewControler: UITableViewController {
-
-    let defaults = UserDefaults.standard
-    var todos: [String] = []
+    var todos: [Item] = []
+    let datatFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let items = defaults.array(forKey: "TodoList") as? [String] {
-            todos = items
+        self.navigationController?.isNavigationBarHidden = true
+        let item = Item()
+        item.title = "Hello World"
+        todos.append(item)
+        let item2 = Item()
+        item2.title = "Hello World2"
+        todos.append(item2)
+        let item3 = Item()
+        item3.title = "Hello World3"
+        todos.append(item3)
+        let item4 = Item()
+        item4.title = "Hello World4"
+        todos.append(item4)
+        loadItems()
+    }
+    
+    func loadItems () {
+        do {
+            if let data = try? Data(contentsOf: datatFilePath!) {
+                let decoder = PropertyListDecoder()
+                todos = try decoder.decode([Item].self, from: data)
+            }
+        } catch {
+            print("Load Items failed")
         }
-        // Do any additional setup after loading the view.
+       
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return todos.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
-        cell.textLabel?.text  = "Hello, World!"
+        let item = todos[indexPath.row]
+        cell.textLabel?.text = item.title
+        
+        cell.accessoryType = item.checked == false ? .none : .checkmark
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        } else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+        todos[indexPath.row].checked = !todos[indexPath.row].checked
+        saveData()
+
+    }
+    
+    func saveData () {
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(self.todos)
+            try data.write(to: self.datatFilePath!)
+        } catch {
+            print("Error")
         }
+
+        self.tableView.reloadData()
     }
 
     @IBAction func onAddPressed(_ sender: UIBarButtonItem) {
@@ -45,11 +80,12 @@ class TodoListViewControler: UITableViewController {
         
         let alert = UIAlertController(title: "Add New Todo", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "Add", style: .default) { _ in
-            let textField = alert.textFields?.first
-            guard let text = textField?.text else { return }
-            self.todos.append(text)
-            self.defaults.set(self.todos, forKey: "TodoList")
-            self.tableView.reloadData()
+//            let textField = alert.textFields?.first
+            guard let text = textField.text else { return }
+            let newItem = Item()
+            newItem.title = text
+            self.todos.append(newItem)
+            self.saveData()
         }
         
         alert.addTextField {(alertTextField) in
