@@ -7,39 +7,29 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewControler: UITableViewController {
-    let datatFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    
+    var todos: [Item] = []
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
         let item = Item()
-        item.title = "Hello World"
-        todos.append(item)
-        let item2 = Item()
-        item2.title = "Hello World2"
-        todos.append(item2)
-        let item3 = Item()
-        item3.title = "Hello World3"
-        todos.append(item3)
-        let item4 = Item()
-        item4.title = "Hello World4"
-        todos.append(item4)
-        loadItems()
+//        loadItems()
     }
     
-    func loadItems () {
-        do {
-            if let data = try? Data(contentsOf: datatFilePath!) {
-                let decoder = PropertyListDecoder()
-                todos = try decoder.decode([Item].self, from: data)
-            }
-        } catch {
-            print("Load Items failed")
-        }
-       
-    }
+//    func loadItems () {
+//        do {
+//            if let data = try? Data(contentsOf: datatFilePath!) {
+//                let decoder = PropertyListDecoder()
+//                todos = try decoder.decode([Item].self, from: data)
+//            }
+//        } catch {
+//            print("Load Items failed")
+//        }
+//       
+//    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todos.count
@@ -63,12 +53,11 @@ class TodoListViewControler: UITableViewController {
     }
     
     func saveData () {
-        let encoder = PropertyListEncoder()
+      
         do {
-            let data = try encoder.encode(self.todos)
-            try data.write(to: self.datatFilePath!)
+           try context.save()
         } catch {
-            print("Error")
+            print("Error saving data")
         }
 
         self.tableView.reloadData()
@@ -81,8 +70,9 @@ class TodoListViewControler: UITableViewController {
         let action = UIAlertAction(title: "Add", style: .default) { _ in
 //            let textField = alert.textFields?.first
             guard let text = textField.text else { return }
-            let newItem = Item()
+            let newItem = Item(context: self.context)
             newItem.title = text
+            newItem.checked = false
             self.todos.append(newItem)
             self.saveData()
         }
