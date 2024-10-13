@@ -9,7 +9,6 @@
 import UIKit
 
 class TodoListViewControler: UITableViewController {
-    var todos: [Item] = []
     let datatFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     override func viewDidLoad() {
