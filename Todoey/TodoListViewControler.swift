@@ -12,24 +12,23 @@ import CoreData
 class TodoListViewControler: UITableViewController {
     var todos: [Item] = []
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
-        let item = Item()
-//        loadItems()
+        loadItems()
     }
     
-//    func loadItems () {
-//        do {
-//            if let data = try? Data(contentsOf: datatFilePath!) {
-//                let decoder = PropertyListDecoder()
-//                todos = try decoder.decode([Item].self, from: data)
-//            }
-//        } catch {
-//            print("Load Items failed")
-//        }
-//       
-//    }
+    func loadItems () {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            let items = try context.fetch(request)
+            todos = items
+        }
+        catch {
+            print("Error fetching data from context: \(error)")
+        }
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return todos.count
@@ -68,7 +67,6 @@ class TodoListViewControler: UITableViewController {
         
         let alert = UIAlertController(title: "Add New Todo", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "Add", style: .default) { _ in
-//            let textField = alert.textFields?.first
             guard let text = textField.text else { return }
             let newItem = Item(context: self.context)
             newItem.title = text

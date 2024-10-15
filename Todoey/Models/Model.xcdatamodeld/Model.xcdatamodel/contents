@@ -3,5 +3,12 @@
     <entity name="Item" representedClassName=".Item" syncable="YES" codeGenerationType="class">
         <attribute name="checked" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="title" attributeType="String"/>
+        <fetchedProperty name="fetchedProperty" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Item"/>
+        </fetchedProperty>
+        <userInfo>
+            <entry key="checked" value="false"/>
+            <entry key="title" value="First todo"/>
+        </userInfo>
     </entity>
 </model>
