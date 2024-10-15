@@ -13,6 +13,7 @@
 		EB2BE503239524DC00FB933B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB2BE502239524DC00FB933B /* Assets.xcassets */; };
 		EB2BE506239524DC00FB933B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB2BE504239524DC00FB933B /* LaunchScreen.storyboard */; };
 		F0E851452CBB978A00734158 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F0E851432CBB978A00734158 /* Model.xcdatamodeld */; };
+		F0E8514A2CBE2C0E00734158 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E851492CBE2C0E00734158 /* CategoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		EB2BE505239524DC00FB933B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB2BE507239524DC00FB933B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0E851442CBB978A00734158 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		F0E851492CBE2C0E00734158 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +59,8 @@
 			isa = PBXGroup;
 			children = (
 				F0521BFA2CBB7D8A00CD8925 /* Models */,
-				EB2BE4F9239524DB00FB933B /* AppDelegate.swift */,
-				EB2BE4FD239524DB00FB933B /* TodoListViewControler.swift */,
 				F0E851412CBB826A00734158 /* Controllers */,
+				EB2BE4F9239524DB00FB933B /* AppDelegate.swift */,
 				EB2BE4FF239524DB00FB933B /* Main.storyboard */,
 				EB2BE502239524DC00FB933B /* Assets.xcassets */,
 				EB2BE504239524DC00FB933B /* LaunchScreen.storyboard */,
@@ -79,6 +80,8 @@
 		F0E851412CBB826A00734158 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EB2BE4FD239524DB00FB933B /* TodoListViewControler.swift */,
+				F0E851492CBE2C0E00734158 /* CategoryViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0E8514A2CBE2C0E00734158 /* CategoryViewController.swift in Sources */,
 				EB2BE4FE239524DB00FB933B /* TodoListViewControler.swift in Sources */,
 				EB2BE4FA239524DB00FB933B /* AppDelegate.swift in Sources */,
 				F0E851452CBB978A00734158 /* Model.xcdatamodeld in Sources */,
