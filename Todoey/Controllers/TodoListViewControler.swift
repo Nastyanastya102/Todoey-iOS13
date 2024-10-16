@@ -25,8 +25,6 @@ class TodoListViewControler: UITableViewController {
         super.viewDidLoad()
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
-
-        
     }
     
     //MARK: - Tableview Datasource Methods
@@ -37,7 +35,7 @@ class TodoListViewControler: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
         
         let item = itemArray[indexPath.row]
         
@@ -60,16 +58,11 @@ class TodoListViewControler: UITableViewController {
     
     //MARK: - Add New Items
     
-    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-        
+    @IBAction func addBtnPressed(_ sender: UIBarButtonItem) {
         var textField = UITextField()
-        
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            //what will happen once the user clicks the Add Item button on our UIAlert
-            
-            
             let newItem = Item(context: self.context)
             newItem.title = textField.text!
             newItem.checked = false
@@ -83,14 +76,10 @@ class TodoListViewControler: UITableViewController {
             textField = alertTextField
             
         }
-        
-        
         alert.addAction(action)
-        
         present(alert, animated: true, completion: nil)
-        
     }
-    
+   
     //MARK - Model Manupulation Methods
     
     func saveItems() {
@@ -106,7 +95,7 @@ class TodoListViewControler: UITableViewController {
     
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
         
-        let categoryPredicate = NSPredicate(format: "parentCaterogy.name MATCHES %@", selectedCategory!.name!)
+        let categoryPredicate = NSPredicate(format: "parentCaterogy.name MATCHES %@", selectedCategory?.name ?? "food")
         
         if let addtionalPredicate = predicate {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, addtionalPredicate])
