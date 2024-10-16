@@ -37,11 +37,16 @@ class CategoryViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
     }
-
-
-    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
-    }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! TodoListViewControler
+        if let indexPath = tableView.indexPathForSelectedRow {
+            destinationVC.selectedCategory = categories[indexPath.row]
+            destinationVC.title = categories[indexPath.row].name
+            destinationVC.navigationItem.largeTitleDisplayMode = .never
+        }
+    }
+
     //MARK: - TableView Delegate Methods
     
     //MARK: - Data Manipulation Methods
@@ -78,6 +83,9 @@ class CategoryViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Category", style: .default) { (action) in
+            if (textField.text == nil) {
+                return
+            }
             let newItem = Category(context: self.context)
             newItem.name = textField.text!
             self.categories.append(newItem)

@@ -23,8 +23,6 @@ class TodoListViewControler: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
     
     //MARK: - Tableview Datasource Methods
@@ -66,6 +64,7 @@ class TodoListViewControler: UITableViewController {
             let newItem = Item(context: self.context)
             newItem.title = textField.text!
             newItem.checked = false
+            newItem.parentCaterogy = self.selectedCategory
             self.itemArray.append(newItem)
             
             self.saveItems()
@@ -95,7 +94,7 @@ class TodoListViewControler: UITableViewController {
     
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
         
-        let categoryPredicate = NSPredicate(format: "parentCaterogy.name MATCHES %@", selectedCategory?.name ?? "food")
+        let categoryPredicate = NSPredicate(format: "parentCaterogy.name MATCHES %@", selectedCategory!.name!)
         
         if let addtionalPredicate = predicate {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, addtionalPredicate])
