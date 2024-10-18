@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwipeCellKit
 
 class TodoListViewControler: UITableViewController {
     
@@ -23,6 +24,8 @@ class TodoListViewControler: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.rowHeight = 60
     }
     
     //MARK: - Tableview Datasource Methods
@@ -33,14 +36,20 @@ class TodoListViewControler: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath) as! SwipeTableViewCell
+        cell.delegate = self
         let item = itemArray[indexPath.row]
         
         cell.textLabel?.text = item.title
         cell.accessoryType = item.checked ? .checkmark : .none
         
         return cell
+    }
+    
+    func removeData (_ selected: Int) {
+        print(selected)
+        itemArray.remove(at: selected)
+        saveItems()
     }
     
     //MARK: - TableView Delegate Methods
@@ -140,5 +149,22 @@ extension TodoListViewControler: UISearchBarDelegate {
             }
           
         }
+    }
+}
+
+//MARK: - Swipable
+
+extension TodoListViewControler: SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            self.removeData(indexPath.row)
+        }
+
+        // customize the action appearance
+        deleteAction.image = UIImage(named: "Trash")
+
+        return [deleteAction]
     }
 }
