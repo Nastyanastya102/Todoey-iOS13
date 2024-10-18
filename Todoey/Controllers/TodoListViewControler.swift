@@ -8,9 +8,8 @@
 
 import UIKit
 import CoreData
-import SwipeCellKit
 
-class TodoListViewControler: UITableViewController {
+class TodoListViewControler: SwipeViewController {
     
     var itemArray = [Item]()
     
@@ -35,9 +34,7 @@ class TodoListViewControler: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath) as! SwipeTableViewCell
-        cell.delegate = self
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let item = itemArray[indexPath.row]
         
         cell.textLabel?.text = item.title
@@ -46,8 +43,12 @@ class TodoListViewControler: UITableViewController {
         return cell
     }
     
+    override func updateData(at index: IndexPath) {
+        removeData(index.row)
+    }
+    
     func removeData (_ selected: Int) {
-        print(selected)
+        context.delete(itemArray[selected])
         itemArray.remove(at: selected)
         saveItems()
     }
@@ -91,7 +92,6 @@ class TodoListViewControler: UITableViewController {
     //MARK - Model Manupulation Methods
     
     func saveItems() {
-        
         do {
           try context.save()
         } catch {
@@ -149,22 +149,5 @@ extension TodoListViewControler: UISearchBarDelegate {
             }
           
         }
-    }
-}
-
-//MARK: - Swipable
-
-extension TodoListViewControler: SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            self.removeData(indexPath.row)
-        }
-
-        // customize the action appearance
-        deleteAction.image = UIImage(named: "Trash")
-
-        return [deleteAction]
     }
 }

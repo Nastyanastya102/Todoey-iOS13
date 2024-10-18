@@ -8,9 +8,9 @@
 
 import UIKit
 import CoreData
-import SwipeCellKit
 
-class CategoryViewController: UITableViewController {
+
+class CategoryViewController: SwipeViewController {
 
     let context = (UIApplication.shared.delegate as!
                    AppDelegate).persistentContainer.viewContext
@@ -24,9 +24,7 @@ class CategoryViewController: UITableViewController {
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
-        cell.delegate = self
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let item = categories[indexPath.row]
         cell.textLabel?.text = item.name
         
@@ -34,7 +32,7 @@ class CategoryViewController: UITableViewController {
     }
     
     func removeData (_ selected: Int) {
-        print(selected)
+        context.delete(categories[selected])
         categories.remove(at: selected)
         saveData()
     }
@@ -54,6 +52,10 @@ class CategoryViewController: UITableViewController {
             destinationVC.title = categories[indexPath.row].name
             destinationVC.navigationItem.largeTitleDisplayMode = .never
         }
+    }
+    
+    override func updateData(at index: IndexPath) {
+        self.removeData(index.row)
     }
 
     //MARK: - TableView Delegate Methods
@@ -112,19 +114,4 @@ class CategoryViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-}
-
-extension CategoryViewController: SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            self.removeData(indexPath.row)
-        }
-
-        // customize the action appearance
-        deleteAction.image = UIImage(named: "Trash")
-
-        return [deleteAction]
-    }
 }
