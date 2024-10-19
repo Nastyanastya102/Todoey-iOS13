@@ -23,8 +23,6 @@ class TodoListViewControler: SwipeViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.rowHeight = 60
     }
     
     //MARK: - Tableview Datasource Methods
@@ -61,7 +59,6 @@ class TodoListViewControler: SwipeViewController {
         saveItems()
         
         tableView.deselectRow(at: indexPath, animated: true)
-        
     }
     
     //MARK: - Add New Items
